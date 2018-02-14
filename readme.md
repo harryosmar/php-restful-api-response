@@ -45,6 +45,9 @@ echo $response->withArray([
 }
 ```
 - With item/object
+
+For this sample, we use [class Book](https://github.com/harryosmar/php-restful-api-response/blob/master/tests/unit/Lib/Book.php) as an item
+
 ```
 <?php
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
