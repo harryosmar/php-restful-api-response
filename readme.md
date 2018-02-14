@@ -1,5 +1,7 @@
 # php restful api response implement PSR-7: HTTP message interfaces
 
+[![Build Status](https://travis-ci.org/harryosmar/php-restful-api-response.svg?branch=master)](https://travis-ci.org/harryosmar/php-restful-api-response)
+
 ## Requirements
 - php >= 5.6
 - composer https://getcomposer.org/download/
