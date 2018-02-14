@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "olxindonesia/plugin-common": "^1.0"
+        "harryosmar/php-restful-api-response": "^1.0"
     }
 }
 ```
