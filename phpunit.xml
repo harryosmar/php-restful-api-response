@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php"
+         processIsolation="false"
+         stopOnFailure="false"
+         convertWarningsToExceptions="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true">
+    <testsuites>
+        <testsuite name="Unit Test Suite">
+            <directory suffix="Test.php">./tests/unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix="Test.php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+    </php>
+
+    <logging>
+        <log type="testdox-html" target="reports/testdox.html" />
+        <log type="testdox-text" target="reports/testdox.txt" />
+    </logging>
+</phpunit>
