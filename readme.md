@@ -22,7 +22,7 @@
 - *then run `composer install` or `composer update`*
 
 ## How To Use
-Check the use sample in the [test code](https://github.com/harryosmar/php-bootstrap/blob/master/tests/unit/ResponseTest.php)
+Check the use sample in the [test code](https://github.com/harryosmar/php-restful-api-response/blob/master/tests/unit/ResponseTest.php)
 
 ## How To Run The Test
 ```
