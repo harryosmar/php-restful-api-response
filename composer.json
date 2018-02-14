@@ -1,5 +1,5 @@
 {
-    "name": "harry/php-restful-api-response",
+    "name": "harryosmar/php-restful-api-response",
     "description": "php restful api response implement PSR-7: HTTP message interfaces",
     "type": "library, composer-plugin",
     "authors": [
