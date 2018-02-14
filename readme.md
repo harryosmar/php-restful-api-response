@@ -50,7 +50,7 @@ echo $response->withArray([
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 
 echo $response->withItem(
-    new Book('harry', 'harryosmarsitohang', 'how to be a ninja', 100000, 2017),
+    new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
     new \PhpRestfulApiResponse\Tests\unit\Lib\Transformer\Book,
     200 //response code 200
 );
@@ -63,7 +63,7 @@ echo $response->withItem(
         "author":
         {
             "name": "harry",
-            "email": "harryosmarsitohang"
+            "email": "harryosmarsitohang@gmail.com"
         },
         "year": 2017,
         "price": 100000
@@ -77,9 +77,9 @@ use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 
 $response->withCollection(
     [
-        new Book('harry', 'harryosmarsitohang', 'how to be a ninja', 100000, 2017),
-        new Book('harry', 'harryosmarsitohang', 'how to be a mage', 500000, 2016),
-        new Book('harry', 'harryosmarsitohang', 'how to be a samurai', 25000, 2000),
+        new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
+        new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a mage', 500000, 2016),
+        new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a samurai', 25000, 2000),
     ],
     new \PhpRestfulApiResponse\Tests\unit\Lib\Transformer\Book,
     200
@@ -93,7 +93,7 @@ $response->withCollection(
         "author":
         {
             "name": "harry",
-            "email": "harryosmarsitohang"
+            "email": "harryosmarsitohang@gmail.com"
         },
         "year": 2017,
         "price": 100000
@@ -103,7 +103,7 @@ $response->withCollection(
         "author":
         {
             "name": "harry",
-            "email": "harryosmarsitohang"
+            "email": "harryosmarsitohang@gmail.com"
         },
         "year": 2016,
         "price": 500000
@@ -113,7 +113,7 @@ $response->withCollection(
         "author":
         {
             "name": "harry",
-            "email": "harryosmarsitohang"
+            "email": "harryosmarsitohang@gmail.com"
         },
         "year": 2000,
         "price": 25000
