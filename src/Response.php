@@ -163,7 +163,7 @@ class Response implements PhpRestfulApiResponse
      * @param array|null $data
      * @param $code
      * @param array $headers
-     * @return Response|static
+     * @return Response
      */
     public function withArray($data, $code = 200, array $headers = [])
     {
