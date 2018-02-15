@@ -154,12 +154,12 @@ class Response implements PhpRestfulApiResponse
     }
 
     /**
-     * @param $data
+     * @param array|null $data
      * @param $code
      * @param array $headers
      * @return Response|static
      */
-    public function withArray(array $data, $code = 200, array $headers = [])
+    public function withArray($data, $code = 200, array $headers = [])
     {
         $new = clone $this;
         $new->setStatusCode($code);
@@ -257,7 +257,7 @@ class Response implements PhpRestfulApiResponse
      * @param array  $headers
      * @return mixed
      */
-    public function errorForbidden($message = '', array $headers = [])
+    public function errorForbidden(string $message = '', array $headers = [])
     {
         return $this->withError($message, 403, $headers);
     }
@@ -269,7 +269,7 @@ class Response implements PhpRestfulApiResponse
      * @param array  $headers
      * @return mixed
      */
-    public function errorInternalError($message = '', array $headers = [])
+    public function errorInternalError(string $message = '', array $headers = [])
     {
         return $this->withError($message, 500, $headers);
     }
@@ -281,7 +281,7 @@ class Response implements PhpRestfulApiResponse
      * @param array  $headers
      * @return mixed
      */
-    public function errorNotFound($message = '', array $headers = [])
+    public function errorNotFound(string $message = '', array $headers = [])
     {
         return $this->withError($message, 404, $headers);
     }
@@ -293,7 +293,7 @@ class Response implements PhpRestfulApiResponse
      * @param array $headers
      * @return mixed
      */
-    public function errorUnauthorized($message = '', array $headers = [])
+    public function errorUnauthorized(string $message = '', array $headers = [])
     {
         return $this->withError($message, 401, $headers);
     }
@@ -317,7 +317,7 @@ class Response implements PhpRestfulApiResponse
      * @param array $headers
      * @return mixed
      */
-    public function errorGone($message = '', array $headers = [])
+    public function errorGone(string $message = '', array $headers = [])
     {
         return $this->withError($message, 410, $headers);
     }
@@ -329,7 +329,7 @@ class Response implements PhpRestfulApiResponse
      * @param array $headers
      * @return mixed
      */
-    public function errorMethodNotAllowed($message = '', array $headers = [])
+    public function errorMethodNotAllowed(string $message = '', array $headers = [])
     {
         return $this->withError($message, 405, $headers);
     }
@@ -341,7 +341,7 @@ class Response implements PhpRestfulApiResponse
      * @param array $headers
      * @return mixed
      */
-    public function errorUnwillingToProcess($message = '', array $headers = [])
+    public function errorUnwillingToProcess(string $message = '', array $headers = [])
     {
         return $this->withError($message, 431, $headers);
     }
@@ -353,7 +353,7 @@ class Response implements PhpRestfulApiResponse
      * @param array $headers
      * @return mixed
      */
-    public function errorUnprocessable($message = '', array $headers = [])
+    public function errorUnprocessable(string $message = '', array $headers = [])
     {
         return $this->withError($message, 422, $headers);
     }
@@ -364,7 +364,7 @@ class Response implements PhpRestfulApiResponse
      * @param int $code
      * @throws InvalidArgumentException on an invalid status code.
      */
-    private function setStatusCode($code)
+    private function setStatusCode(int $code)
     {
         if (! is_numeric($code)
             || is_float($code)

@@ -60,150 +60,217 @@ class ResponseTest extends Base
         $this->assertEquals('{"data":[{"title":"how to be a ninja","author":{"name":"harry","email":"harryosmarsitohang"},"year":2017,"price":100000},{"title":"how to be a mage","author":{"name":"harry","email":"harryosmarsitohang"},"year":2016,"price":500000},{"title":"how to be a samurai","author":{"name":"harry","email":"harryosmarsitohang"},"year":2000,"price":25000}]}', $response->getBody()->__toString());
     }
 
+    private function withError(Response $response, $code, $message = null)
+    {
+        $this->assertEquals($code, $response->getStatusCode());
+        $this->assertEquals(json_encode([
+            'error' => array_filter([
+                'http_code' => $response->getStatusCode(),
+                'phrase' => $response->getReasonPhrase(),
+                'message' => $message
+            ])
+        ]), $response->getBody()->__toString());
+
+    }
+
     public function test_withError()
     {
-        /** @var Response $response */
-        $response = $this->response->withError('error occured', 400);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":400,"phrase":"Bad Request","message":"error occured"}}', $response->getBody()->__toString());
+        $code = 400;
+        $message = 'error occured';
+        $this->withError(
+            $this->response->withError($message, $code),
+            $code,
+            $message
+        );
     }
 
     public function test_errorNotFound()
     {
-        /** @var Response $response */
-        $response = $this->response->errorNotFound();
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":404,"phrase":"Not Found"}}', $response->getBody()->__toString());
+        $code = 404;
+        $message = '';
+        $this->withError(
+            $this->response->errorNotFound($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorNotFound_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorNotFound('go back to home page');
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":404,"phrase":"Not Found","message":"go back to home page"}}', $response->getBody()->__toString());
+        $code = 404;
+        $message = 'go back to home page';
+        $this->withError(
+            $this->response->errorNotFound($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorForbidden()
     {
-        /** @var Response $response */
-        $response = $this->response->errorForbidden();
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":403,"phrase":"Forbidden"}}', $response->getBody()->__toString());
+        $code = 403;
+        $message = '';
+        $this->withError(
+            $this->response->errorForbidden($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorForbidden_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorForbidden('forbid to access this');
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":403,"phrase":"Forbidden","message":"forbid to access this"}}', $response->getBody()->__toString());
+        $code = 403;
+        $message = 'forbid to access this';
+        $this->withError(
+            $this->response->errorForbidden($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorInternalError()
     {
-        /** @var Response $response */
-        $response = $this->response->errorInternalError();
-        $this->assertEquals(500, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":500,"phrase":"Internal Server Error"}}', $response->getBody()->__toString());
+        $code = 500;
+        $message = '';
+        $this->withError(
+            $this->response->errorInternalError($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorInternalError_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorInternalError('something wrong');
-        $this->assertEquals(500, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":500,"phrase":"Internal Server Error","message":"something wrong"}}', $response->getBody()->__toString());
+        $code = 500;
+        $message = 'something wrong';
+        $this->withError(
+            $this->response->errorInternalError($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnauthorized()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnauthorized();
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":401,"phrase":"Unauthorized"}}', $response->getBody()->__toString());
+        $code = 401;
+        $message = '';
+        $this->withError(
+            $this->response->errorUnauthorized($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnauthorized_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnauthorized('token required');
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":401,"phrase":"Unauthorized","message":"token required"}}', $response->getBody()->__toString());
+        $code = 401;
+        $message = 'access token required';
+        $this->withError(
+            $this->response->errorUnauthorized($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorWrongArgs()
     {
-        /** @var Response $response */
-        $response = $this->response->errorWrongArgs([
+        $code = 400;
+        $message = [
             'username' => 'required',
             'password' => 'required'
-        ]);
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":400,"phrase":"Bad Request","message":{"username":"required","password":"required"}}}', $response->getBody()->__toString());
+        ];
+        $this->withError(
+            $this->response->errorWrongArgs($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorGone()
     {
-        /** @var Response $response */
-        $response = $this->response->errorGone();
-        $this->assertEquals(410, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":410,"phrase":"Gone"}}', $response->getBody()->__toString());
+        $code = 410;
+        $message = '';
+        $this->withError(
+            $this->response->errorGone($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorGone_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorGone('mysql gone away');
-        $this->assertEquals(410, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":410,"phrase":"Gone","message":"mysql gone away"}}', $response->getBody()->__toString());
+        $code = 410;
+        $message = 'mysql gone away';
+        $this->withError(
+            $this->response->errorGone($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorMethodNotAllowed()
     {
-        /** @var Response $response */
-        $response = $this->response->errorMethodNotAllowed();
-        $this->assertEquals(405, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":405,"phrase":"Method Not Allowed"}}', $response->getBody()->__toString());
+        $code = 405;
+        $message = '';
+        $this->withError(
+            $this->response->errorMethodNotAllowed($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorMethodNotAllowed_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorMethodNotAllowed('GET method is not allowed for this endpoint');
-        $this->assertEquals(405, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":405,"phrase":"Method Not Allowed","message":"GET method is not allowed for this endpoint"}}', $response->getBody()->__toString());
+        $code = 405;
+        $message = 'GET method is not allowed for this endpoint';
+        $this->withError(
+            $this->response->errorMethodNotAllowed($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnwillingToProcess()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnwillingToProcess();
-        $this->assertEquals(431, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":431,"phrase":"Request Header Fields Too Large"}}', $response->getBody()->__toString());
+        $code = 431;
+        $message = '';
+        $this->withError(
+            $this->response->errorUnwillingToProcess($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnwillingToProcess_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnwillingToProcess('Request too size too big');
-        $this->assertEquals(431, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":431,"phrase":"Request Header Fields Too Large","message":"Request too size too big"}}', $response->getBody()->__toString());
+        $code = 431;
+        $message = 'Request size is too big';
+        $this->withError(
+            $this->response->errorUnwillingToProcess($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnprocessable()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnprocessable();
-        $this->assertEquals(422, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":422,"phrase":"Unprocessable Entity"}}', $response->getBody()->__toString());
+        $code = 422;
+        $message = '';
+        $this->withError(
+            $this->response->errorUnprocessable($message),
+            $code,
+            $message
+        );
     }
 
     public function test_errorUnprocessable_with_message()
     {
-        /** @var Response $response */
-        $response = $this->response->errorUnprocessable('Your request cannot be processed');
-        $this->assertEquals(422, $response->getStatusCode());
-        $this->assertEquals('{"error":{"http_code":422,"phrase":"Unprocessable Entity","message":"Your request cannot be processed"}}', $response->getBody()->__toString());
+        $code = 422;
+        $message = 'Your request cannot be processed';
+        $this->withError(
+            $this->response->errorUnprocessable($message),
+            $code,
+            $message
+        );
     }
 }

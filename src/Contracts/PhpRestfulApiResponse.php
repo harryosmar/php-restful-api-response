@@ -16,12 +16,12 @@ use Zend\Diactoros\Response;
 interface PhpRestfulApiResponse extends ResponseInterface
 {
     /**
-     * @param $data
+     * @param array|null $data
      * @param $code
      * @param array $headers
      * @return Response|static
      */
-    public function withArray(array $data, $code = 200, array $headers = []);
+    public function withArray($data, $code = 200, array $headers = []);
 
     /**
      * @param $data
@@ -63,7 +63,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorForbidden($message = '', array $headers = []);
+    public function errorForbidden(string $message = '', array $headers = []);
 
     /**
      * Generates a response with a 500 HTTP header and a given message.
@@ -72,7 +72,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorInternalError($message = '', array $headers = []);
+    public function errorInternalError(string $message = '', array $headers = []);
 
     /**
      * Generates a response with a 404 HTTP header and a given message.
@@ -81,7 +81,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorNotFound($message = '', array $headers = []);
+    public function errorNotFound(string $message = '', array $headers = []);
 
     /**
      * Generates a response with a 401 HTTP header and a given message.
@@ -90,7 +90,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnauthorized($message = '', array $headers = []);
+    public function errorUnauthorized(string $message = '', array $headers = []);
 
     /**
      * Generates a response with a 400 HTTP header and a given message.
@@ -108,7 +108,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorGone($message = '', array $headers = []);
+    public function errorGone(string $message = '', array $headers = []);
 
     /**
      * Generates a response with a 405 HTTP header and a given message.
@@ -117,7 +117,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorMethodNotAllowed($message = '', array $headers = []);
+    public function errorMethodNotAllowed(string $message = '', array $headers = []);
 
     /**
      * Generates a Response with a 431 HTTP header and a given message.
@@ -126,7 +126,7 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnwillingToProcess($message = '', array $headers = []);
+    public function errorUnwillingToProcess(string $message = '', array $headers = []);
 
     /**
      * Generates a Response with a 422 HTTP header and a given message.
@@ -135,5 +135,5 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnprocessable($message = '', array $headers = []);
+    public function errorUnprocessable(string $message = '', array $headers = []);
 }
