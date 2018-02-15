@@ -269,34 +269,44 @@ class ResponseTest extends Base
         $this->assertEquals(200, $this->response->getStatusCode());
     }
 
-    public function test_setStatusCode()
+    public function test_setStatusCode_less_than_min_status_code()
     {
-        $responseReflect = new ReflectionClass(Response::class);
-        $method = $responseReflect->getMethod('setStatusCode');
-        $method->setAccessible(true);
-
         try {
-            $method->invokeArgs($this->response, [99]);
+            $this->getMethodSetStatusCode()->invokeArgs($this->response, [99]);
         } catch (InvalidArgumentException $exception) {
             $this->assertEquals(
                 sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 99, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
                 $exception->getMessage()
             );
         }
+    }
 
+    public function test_setStatusCode_greater_than_max_status_code()
+    {
         try {
-            $method->invokeArgs($this->response, [600]);
+            $this->getMethodSetStatusCode()->invokeArgs($this->response, [600]);
         } catch (InvalidArgumentException $exception) {
             $this->assertEquals(
                 sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 600, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
                 $exception->getMessage()
             );
         }
+    }
 
-        $method->invokeArgs($this->response, [201]);
-
+    public function test_setStatusCode()
+    {
+        $this->getMethodSetStatusCode()->invokeArgs($this->response, [201]);
         $this->assertEquals(201, $this->response->getStatusCode());
     }
+
+    private function getMethodSetStatusCode()
+    {
+        $responseReflect = new ReflectionClass(Response::class);
+        $method = $responseReflect->getMethod('setStatusCode');
+        $method->setAccessible(true);
+        return $method;
+    }
+
 
     private function withError(Response $response, $code, $message = null)
     {
