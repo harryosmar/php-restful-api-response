@@ -10,6 +10,8 @@ namespace PhpRestfulApiResponse\Tests\unit;
 
 use PhpRestfulApiResponse\Response;
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
+use ReflectionClass;
+use InvalidArgumentException;
 
 class ResponseTest extends Base
 {
@@ -58,19 +60,6 @@ class ResponseTest extends Base
         );
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('{"data":[{"title":"how to be a ninja","author":{"name":"harry","email":"harryosmarsitohang"},"year":2017,"price":100000},{"title":"how to be a mage","author":{"name":"harry","email":"harryosmarsitohang"},"year":2016,"price":500000},{"title":"how to be a samurai","author":{"name":"harry","email":"harryosmarsitohang"},"year":2000,"price":25000}]}', $response->getBody()->__toString());
-    }
-
-    private function withError(Response $response, $code, $message = null)
-    {
-        $this->assertEquals($code, $response->getStatusCode());
-        $this->assertEquals(json_encode([
-            'error' => array_filter([
-                'http_code' => $response->getStatusCode(),
-                'phrase' => $response->getReasonPhrase(),
-                'message' => $message
-            ])
-        ]), $response->getBody()->__toString());
-
     }
 
     public function test_withError()
@@ -272,5 +261,47 @@ class ResponseTest extends Base
             $code,
             $message
         );
+    }
+
+    public function test_setStatusCode()
+    {
+        $responseReflect = new ReflectionClass(Response::class);
+        $method = $responseReflect->getMethod('setStatusCode');
+        $method->setAccessible(true);
+
+        try {
+            $method->invokeArgs($this->response, [99]);
+        } catch (InvalidArgumentException $exception) {
+            $this->assertEquals(
+                sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 99, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
+                $exception->getMessage()
+            );
+        }
+
+        try {
+            $method->invokeArgs($this->response, [600]);
+        } catch (InvalidArgumentException $exception) {
+            $this->assertEquals(
+                sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 600, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
+                $exception->getMessage()
+            );
+        }
+
+        $method->invokeArgs($this->response, [201]);
+
+        $this->assertEquals(201, $this->response->getStatusCode());
+    }
+
+    private function withError(Response $response, $code, $message = null)
+    {
+        $this->assertEquals($code, $response->getStatusCode());
+        $this->assertEquals(json_encode([
+            'error' => array_filter([
+                'http_code' => $response->getStatusCode(),
+                'phrase' => $response->getReasonPhrase(),
+                'message' => $message
+            ])
+        ]), $response->getBody()->__toString());
+
     }
 }
