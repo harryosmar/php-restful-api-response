@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/harryosmar/php-restful-api-response.svg?branch=master)](https://travis-ci.org/harryosmar/php-restful-api-response)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/?branch=master)
 
 ## Requirements
 - php >= 5.6
