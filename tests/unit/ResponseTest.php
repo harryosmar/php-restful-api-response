@@ -263,6 +263,12 @@ class ResponseTest extends Base
         );
     }
 
+    public function test_withStatus()
+    {
+        $this->response->withStatus(200);
+        $this->assertEquals(200, $this->response->getStatusCode());
+    }
+
     public function test_setStatusCode()
     {
         $responseReflect = new ReflectionClass(Response::class);
