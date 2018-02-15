@@ -5,7 +5,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/?branch=master)
 
 ## Requirements
-- php >= 5.6
+- php >= 7.0
 - composer https://getcomposer.org/download/
 
 ## How To Setup
