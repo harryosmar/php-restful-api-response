@@ -271,32 +271,30 @@ class ResponseTest extends Base
 
     public function test_setStatusCode_less_than_min_status_code()
     {
-        try {
-            $this->getMethodSetStatusCode()->invokeArgs($this->response, [99]);
-        } catch (InvalidArgumentException $exception) {
-            $this->assertEquals(
-                sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 99, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
-                $exception->getMessage()
-            );
-        }
+        $this->run_setStatusCode($this->getMethodSetStatusCode(), 99);
     }
 
     public function test_setStatusCode_greater_than_max_status_code()
     {
-        try {
-            $this->getMethodSetStatusCode()->invokeArgs($this->response, [600]);
-        } catch (InvalidArgumentException $exception) {
-            $this->assertEquals(
-                sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', 600, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
-                $exception->getMessage()
-            );
-        }
+        $this->run_setStatusCode($this->getMethodSetStatusCode(), 600);
     }
 
     public function test_setStatusCode()
     {
-        $this->getMethodSetStatusCode()->invokeArgs($this->response, [201]);
-        $this->assertEquals(201, $this->response->getStatusCode());
+        $this->run_setStatusCode($this->getMethodSetStatusCode(), 200);
+    }
+
+    private function run_setStatusCode(\ReflectionMethod $method, $code)
+    {
+        try {
+            $method->invokeArgs($this->response, [$code]);
+            $this->assertEquals($code, $this->response->getStatusCode());
+        } catch (InvalidArgumentException $exception) {
+            $this->assertEquals(
+                sprintf('Invalid status code "%s"; must be an integer between %d and %d, inclusive', $code, Response::MIN_STATUS_CODE_VALUE, Response::MAX_STATUS_CODE_VALUE),
+                $exception->getMessage()
+            );
+        }
     }
 
     private function getMethodSetStatusCode()
