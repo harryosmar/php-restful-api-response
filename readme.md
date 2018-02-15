@@ -1,5 +1,6 @@
 # php restful api response implement PSR-7: HTTP message interfaces
 
+[![Latest Version](https://img.shields.io/github/release/harryosmar/php-restful-api-response.svg?style=flat-square)](https://github.com/harryosmar/php-restful-api-response/releases)
 [![Build Status](https://travis-ci.org/harryosmar/php-restful-api-response.svg?branch=master)](https://travis-ci.org/harryosmar/php-restful-api-response)
 [![Build Status](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/badges/build.png?b=master)](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/harryosmar/php-restful-api-response/?branch=master)
