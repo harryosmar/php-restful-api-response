@@ -113,6 +113,12 @@ class Response implements PhpRestfulApiResponse
      */
     private $statusCode;
 
+    /**
+     * Response constructor.
+     * @param string $body
+     * @param int $status
+     * @param array $headers
+     */
     public function __construct($body = 'php://memory', $status = 200, array $headers = [])
     {
         $this->setStatusCode($status);
@@ -366,9 +372,7 @@ class Response implements PhpRestfulApiResponse
      */
     private function setStatusCode(int $code)
     {
-        if (! is_numeric($code)
-            || is_float($code)
-            || $code < static::MIN_STATUS_CODE_VALUE
+        if ($code < static::MIN_STATUS_CODE_VALUE
             || $code > static::MAX_STATUS_CODE_VALUE
         ) {
             throw new InvalidArgumentException(sprintf(
