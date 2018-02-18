@@ -40,7 +40,7 @@ $response = new Response();
 echo $response->withArray([
     'status' => 'created',
     'id' => 1
-], 201); //response code 201
+], 200); //response code 200
 ```
 response
 ```json
@@ -93,7 +93,7 @@ use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 echo $response->withItem(
     new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
     new \PhpRestfulApiResponse\Tests\unit\Lib\Transformer\Book,
-    201 //response code 200
+    201
 );
 ```
 response 201
