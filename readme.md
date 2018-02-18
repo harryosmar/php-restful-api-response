@@ -55,7 +55,7 @@ response
 * [with item](#with-item)
 * [with collection](#with-collection)
 * [error](#error)
-    * [with-error](#with-error)
+    * [With Error](#with-error)
     * [403 Forbidden](#403-forbidden)
     * [500 Internal Server Error](#500-internal-server-error)
     * [404 Not Found](#404-not-found)
