@@ -10,6 +10,12 @@
 - php >= 7.0
 - composer https://getcomposer.org/download/
 
+## Features
+- Implement PSR-7: HTTP message interfaces, extend https://github.com/zendframework/zend-diactoros
+- Provides response format [collection](#with-collection) & [item](#with-item) using library http://fractal.thephpleague.com/
+- Provides basic [errors response](#error)
+
+
 ## How To Setup
 - *add this lines to your `composer.json` file*
 ```
