@@ -55,11 +55,16 @@ response
 * [with item](#with-item)
 * [with collection](#with-collection)
 * [error](#error)
+    * [with-error](#with-error)
     * [403 Forbidden](#403-forbidden)
     * [500 Internal Server Error](#500-internal-server-error)
     * [404 Not Found](#404-not-found)
     * [401 Unauthorized](#401-unauthorized)
     * [400 Bad Request](#400-bad-request)
+    * [410 Gone](#410-gone)
+    * [405 Method Not Allowed](#405-method-not-allowed)
+    * [431 Request Header Fields Too Large](#431-request-header-fields-too-large)
+    * [422 Unprocessable Entity](#422-unprocessable-entity)
 
 ##### With Array
 ```php
@@ -88,10 +93,10 @@ use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 echo $response->withItem(
     new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
     new \PhpRestfulApiResponse\Tests\unit\Lib\Transformer\Book,
-    200 //response code 200
+    201 //response code 200
 );
 ```
-response
+response 201
 ```json
 {
     "data":
@@ -124,7 +129,7 @@ $response->withCollection(
     200
 );
 ```
-response
+response 200
 ```json
 {
     "data": [
@@ -163,13 +168,26 @@ response
 
 #### Error
 
+##### With Error
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->withError(['error' => 'something is wrong, please try again'], 500);
+```
+response 500
+```json
+{
+    "error": "something is wrong, please try again"
+}
+```
+
 ##### 403 Forbidden
 ```php
 <?php
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorNotFound();
 ```
-response
+response 403
 ```json
 {
     "error":
@@ -186,7 +204,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorInternalError();
 ```
-response
+response 500
 ```json
 {
     "error":
@@ -203,7 +221,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorNotFound();
 ```
-response
+response 404
 ```json
 {
     "error":
@@ -220,7 +238,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorUnauthorized();
 ```
-response
+response 401
 ```json
 {
     "error":
@@ -240,7 +258,7 @@ echo $response->errorWrongArgs([
    'password' => 'required'
 ]);
 ```
-response
+response 400
 ```json
 {
     "error":
@@ -262,24 +280,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorGone();
 ```
-response
-```json
-{
-    "error":
-    {
-        "http_code": 410,
-        "phrase": "Unauthorized"
-    }
-}
-```
-
-##### 410 Gone
-```php
-<?php
-/** @var \PhpRestfulApiResponse\Response $response */
-echo $response->errorGone();
-```
-response
+response 410
 ```json
 {
     "error":
@@ -296,7 +297,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorMethodNotAllowed();
 ```
-response
+response 405
 ```json
 {
     "error":
@@ -313,7 +314,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorUnwillingToProcess();
 ```
-response
+response 431
 ```json
 {
     "error":
@@ -330,7 +331,7 @@ response
 /** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorUnprocessable();
 ```
-response
+response 422
 ```json
 {
     "error":

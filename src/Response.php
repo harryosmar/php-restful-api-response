@@ -232,7 +232,7 @@ class Response implements PhpRestfulApiResponse
      * Response for errors
      *
      * @param string|array $message
-     * @param string $code
+     * @param int $code
      * @param array  $headers
      * @return mixed
      */
