@@ -28,42 +28,70 @@
 - *then run `composer install` or `composer update`*
 
 ## How To Use
-- First instantiate the response object
+
+Simple example how to use
 ```
 <?php
 
 use PhpRestfulApiResponse\Response;
 
 $response = new Response();
-```
-- With simple array
-```
-<?php
+
 echo $response->withArray([
     'status' => 'created',
     'id' => 1
 ], 201); //response code 201
 ```
+response
 ```json
 {
     "status": "created",
     "id": 1
 }
 ```
-- With item/object
 
-For this sample, we use [class Book](https://github.com/harryosmar/php-restful-api-response/blob/master/tests/unit/Lib/Book.php) as an item
+## Available Response Format
+* [with array](#with-array)
+* [with item](#with-item)
+* [with collection](#with-collection)
+* [error](#error)
+    * [403 Forbidden](#403-forbidden)
+    * [500 Internal Server Error](#500-internal-server-error)
+    * [404 Not Found](#404-not-found)
+    * [401 Unauthorized](#401-unauthorized)
+    * [400 Bad Request](#400-bad-request)
 
+##### With Array
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->withArray([
+    'status' => 'created',
+    'id' => 1
+], 201); //response code 201
 ```
+response
+```json
+{
+    "status": "created",
+    "id": 1
+}
+```
+
+##### With Item
+For this sample, we use [class Book](https://github.com/harryosmar/php-restful-api-response/blob/master/tests/unit/Lib/Book.php) as an item
+```php
 <?php
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 
+/** @var \PhpRestfulApiResponse\Response $response */
 echo $response->withItem(
     new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
     new \PhpRestfulApiResponse\Tests\unit\Lib\Transformer\Book,
     200 //response code 200
 );
 ```
+response
 ```json
 {
     "data":
@@ -79,11 +107,13 @@ echo $response->withItem(
     }
 }
 ```
-- With collection of items
-```
+
+##### With Collection
+```php
 <?php
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 
+/** @var \PhpRestfulApiResponse\Response $response */
 $response->withCollection(
     [
         new Book('harry', 'harryosmarsitohang@gmail.com', 'how to be a ninja', 100000, 2017),
@@ -94,6 +124,7 @@ $response->withCollection(
     200
 );
 ```
+response
 ```json
 {
     "data": [
@@ -129,25 +160,33 @@ $response->withCollection(
     }]
 }
 ```
-- 404 Not Found
-```
+
+#### Error
+
+##### 403 Forbidden
+```php
 <?php
+/** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorNotFound();
 ```
+response
 ```json
 {
     "error":
     {
-        "http_code": 404,
-        "phrase": "Not Found"
+        "http_code": 403,
+        "phrase": "Forbidden"
     }
 }
 ```
-- 500 Internal Server Error
-```
+
+##### 500 Internal Server Error
+```php
 <?php
+/** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorInternalError();
 ```
+response
 ```json
 {
     "error":
@@ -157,14 +196,51 @@ echo $response->errorInternalError();
     }
 }
 ```
-- 400 Bad Request
-```
+
+##### 404 Not Found
+```php
 <?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorNotFound();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 404,
+        "phrase": "Not Found"
+    }
+}
+```
+
+##### 401 Unauthorized
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorUnauthorized();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 401,
+        "phrase": "Unauthorized"
+    }
+}
+```
+
+##### 400 Bad Request
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
 echo $response->errorWrongArgs([
    'username' => 'required',
    'password' => 'required'
 ]);
 ```
+response
 ```json
 {
     "error":
@@ -179,17 +255,88 @@ echo $response->errorWrongArgs([
     }
 }
 ```
-- 401 Unauthorized
-```
+
+##### 410 Gone
+```php
 <?php
-echo $response->errorUnauthorized();
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorGone();
 ```
+response
 ```json
 {
     "error":
     {
-        "http_code": 401,
+        "http_code": 410,
         "phrase": "Unauthorized"
+    }
+}
+```
+
+##### 410 Gone
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorGone();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 410,
+        "phrase": "Gone"
+    }
+}
+```
+
+##### 405 Method Not Allowed
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorMethodNotAllowed();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 405,
+        "phrase": "Method Not Allowed"
+    }
+}
+```
+
+##### 431 Request Header Fields Too Large
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorUnwillingToProcess();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 431,
+        "phrase": "Request Header Fields Too Large"
+    }
+}
+```
+
+##### 422 Unprocessable Entity
+```php
+<?php
+/** @var \PhpRestfulApiResponse\Response $response */
+echo $response->errorUnprocessable();
+```
+response
+```json
+{
+    "error":
+    {
+        "http_code": 422,
+        "phrase": "Unprocessable Entity"
     }
 }
 ```
