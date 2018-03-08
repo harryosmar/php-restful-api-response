@@ -20,12 +20,6 @@
 - *add this lines to your `composer.json` file*
 ```
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:harryosmar/php-restful-api-response.git"
-        }
-    ],
     "require": {
         "harryosmar/php-restful-api-response": "^1.1"
     }

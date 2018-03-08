@@ -1,7 +1,7 @@
 {
     "name": "harryosmar/php-restful-api-response",
     "description": "php restful api response implement PSR-7: HTTP message interfaces",
-    "type": "library, composer-plugin",
+    "type": "library",
     "authors": [
         {
             "name": "Harry Sitohang",
