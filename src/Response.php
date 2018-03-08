@@ -16,6 +16,7 @@ use League\Fractal\TransformerAbstract;
 use PhpRestfulApiResponse\Contracts\PhpRestfulApiResponse;
 use Zend\Diactoros\MessageTrait;
 use InvalidArgumentException;
+use Zend\Diactoros\Response\JsonResponse;
 
 class Response implements PhpRestfulApiResponse
 {
@@ -176,7 +177,7 @@ class Response implements PhpRestfulApiResponse
     {
         $new = clone $this;
         $new->setStatusCode($code);
-        $new->getBody()->write(json_encode($data));
+        $new->getBody()->write($this->jsonEncode($data));
         $new = $new->withHeader('Content-Type', 'application/json');
         $new->headers = array_merge($new->headers, $headers);
         return $new;
@@ -250,7 +251,7 @@ class Response implements PhpRestfulApiResponse
         $new->setStatusCode($statusCode);
         $new->setErrorCode($errorCode);
         $new->getBody()->write(
-            json_encode(
+            $this->jsonEncode(
                 [
                     'error' => array_filter([
                         'http_code' => $new->statusCode,
@@ -419,5 +420,34 @@ class Response implements PhpRestfulApiResponse
             ));
         }
         $this->statusCode = $statusCode;
+    }
+
+    /**
+     * Encode the provided data to JSON.
+     *
+     * @param mixed $data
+     * @return string
+     * @throws InvalidArgumentException if unable to encode the $data to JSON.
+     */
+    private function jsonEncode($data)
+    {
+        if (is_resource($data)) {
+            throw new InvalidArgumentException('Cannot JSON encode resources');
+        }
+
+        // Clear json_last_error()
+        json_encode(null);
+
+        $json = json_encode($data, JsonResponse::DEFAULT_JSON_FLAGS);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new InvalidArgumentException(sprintf(
+                'Unable to encode data to JSON in %s: %s',
+                __CLASS__,
+                json_last_error_msg()
+            ));
+        }
+
+        return $json;
     }
 }
