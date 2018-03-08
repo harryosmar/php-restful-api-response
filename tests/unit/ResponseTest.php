@@ -73,6 +73,19 @@ class ResponseTest extends Base
         );
     }
 
+    public function test_withError_with_param_errorCode()
+    {
+        $code = 400;
+        $message = 'error occured';
+        $errorCode = 'ERROR-CODE';
+        $this->withError(
+            $this->response->withError($message, $code, $errorCode),
+            $code,
+            $message,
+            $errorCode
+        );
+    }
+
     public function test_errorNotFound()
     {
         $code = 404;
@@ -284,6 +297,11 @@ class ResponseTest extends Base
         $this->run_setStatusCode($this->getMethodSetStatusCode(), 200);
     }
 
+    public function test_setErrorCode()
+    {
+        $this->run_setErrorCode($this->getMethodSetErrorCode(), "ERROR-CODE");
+    }
+
     private function run_setStatusCode(\ReflectionMethod $method, $code)
     {
         try {
@@ -297,6 +315,20 @@ class ResponseTest extends Base
         }
     }
 
+    private function run_setErrorCode(\ReflectionMethod $method, $code)
+    {
+        $method->invokeArgs($this->response, [$code]);
+        $this->assertEquals($code, $this->response->getErrorCode());
+    }
+
+    private function getMethodSetErrorCode()
+    {
+        $responseReflect = new ReflectionClass(Response::class);
+        $method = $responseReflect->getMethod('setErrorCode');
+        $method->setAccessible(true);
+        return $method;
+    }
+
     private function getMethodSetStatusCode()
     {
         $responseReflect = new ReflectionClass(Response::class);
@@ -306,12 +338,15 @@ class ResponseTest extends Base
     }
 
 
-    private function withError(Response $response, $code, $message = null)
+    private function withError(Response $response, $code, $message = null, $errorCode = null)
     {
         $this->assertEquals($code, $response->getStatusCode());
+        $this->assertEquals($errorCode, $response->getErrorCode());
+
         $this->assertEquals(json_encode([
             'error' => array_filter([
                 'http_code' => $response->getStatusCode(),
+                'code' => $response->getErrorCode(),
                 'phrase' => $response->getReasonPhrase(),
                 'message' => $message
             ])

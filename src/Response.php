@@ -114,14 +114,21 @@ class Response implements PhpRestfulApiResponse
     private $statusCode;
 
     /**
+     * @var int|string
+     */
+    private $errorCode;
+
+    /**
      * Response constructor.
      * @param string $body
      * @param int $status
+     * @param int $errorCode
      * @param array $headers
      */
-    public function __construct($body = 'php://memory', $status = 200, array $headers = [])
+    public function __construct($body = 'php://memory', int $status = 200, $errorCode = null, array $headers = [])
     {
         $this->setStatusCode($status);
+        $this->setErrorCode($errorCode);
         $this->stream = $this->getStream($body, 'wb+');
         $this->setHeaders($headers);
     }
@@ -232,19 +239,22 @@ class Response implements PhpRestfulApiResponse
      * Response for errors
      *
      * @param string|array $message
-     * @param int $code
+     * @param int $statusCode
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function withError($message, $code, array $headers = [])
+    public function withError($message, int $statusCode, $errorCode = null, array $headers = [])
     {
         $new = clone $this;
-        $new->setStatusCode($code);
+        $new->setStatusCode($statusCode);
+        $new->setErrorCode($errorCode);
         $new->getBody()->write(
             json_encode(
                 [
                     'error' => array_filter([
                         'http_code' => $new->statusCode,
+                        'code' => $errorCode,
                         'phrase' => $new->getReasonPhrase(),
                         'message' => $message
                     ])
@@ -260,128 +270,154 @@ class Response implements PhpRestfulApiResponse
      * Generates a response with a 403 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorForbidden(string $message = '', array $headers = [])
+    public function errorForbidden(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 403, $headers);
+        return $this->withError($message, 403, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 500 HTTP header and a given message.
      *
      * @param string $message
-     * @param array  $headers
+     * @param int|string $errorCode
+     * @param array $headers
      * @return mixed
      */
-    public function errorInternalError(string $message = '', array $headers = [])
+    public function errorInternalError(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 500, $headers);
+        return $this->withError($message, 500, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 404 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorNotFound(string $message = '', array $headers = [])
+    public function errorNotFound(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 404, $headers);
+        return $this->withError($message, 404, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 401 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorUnauthorized(string $message = '', array $headers = [])
+    public function errorUnauthorized(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 401, $headers);
+        return $this->withError($message, 401, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 400 HTTP header and a given message.
      *
      * @param array $message
+     * @param int|array $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorWrongArgs(array $message, array $headers = [])
+    public function errorWrongArgs(array $message, $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 400, $headers);
+        return $this->withError($message, 400, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 410 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorGone(string $message = '', array $headers = [])
+    public function errorGone(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 410, $headers);
+        return $this->withError($message, 410, $errorCode, $headers);
     }
 
     /**
      * Generates a response with a 405 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorMethodNotAllowed(string $message = '', array $headers = [])
+    public function errorMethodNotAllowed(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 405, $headers);
+        return $this->withError($message, 405, $errorCode, $headers);
     }
 
     /**
      * Generates a Response with a 431 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorUnwillingToProcess(string $message = '', array $headers = [])
+    public function errorUnwillingToProcess(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 431, $headers);
+        return $this->withError($message, 431, $errorCode, $headers);
     }
 
     /**
      * Generates a Response with a 422 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function errorUnprocessable(string $message = '', array $headers = [])
+    public function errorUnprocessable(string $message = '', $errorCode = null, array $headers = [])
     {
-        return $this->withError($message, 422, $headers);
+        return $this->withError($message, 422, $errorCode, $headers);
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getErrorCode()
+    {
+        return $this->errorCode;
+    }
+
+    /**
+     * @param $errorCode
+     * @return $this
+     */
+    public function setErrorCode($errorCode)
+    {
+        $this->errorCode = $errorCode;
     }
 
     /**
      * Set a valid status code.
      *
-     * @param int $code
+     * @param int $statusCode
      * @throws InvalidArgumentException on an invalid status code.
      */
-    private function setStatusCode(int $code)
+    private function setStatusCode(int $statusCode)
     {
-        if ($code < static::MIN_STATUS_CODE_VALUE
-            || $code > static::MAX_STATUS_CODE_VALUE
+        if ($statusCode < static::MIN_STATUS_CODE_VALUE
+            || $statusCode > static::MAX_STATUS_CODE_VALUE
         ) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid status code "%s"; must be an integer between %d and %d, inclusive',
-                (is_scalar($code) ? $code : gettype($code)),
+                (is_scalar($statusCode) ? $statusCode : gettype($statusCode)),
                 static::MIN_STATUS_CODE_VALUE,
                 static::MAX_STATUS_CODE_VALUE
             ));
         }
-        $this->statusCode = $code;
+        $this->statusCode = $statusCode;
     }
 }
