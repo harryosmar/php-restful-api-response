@@ -50,90 +50,100 @@ interface PhpRestfulApiResponse extends ResponseInterface
      * Generates a response with custom code HTTP header and a given message.
      *
      * @param $message
-     * @param $code
+     * @param int $statusCode
+     * @param int|string $errorCode
      * @param array $headers
      * @return mixed
      */
-    public function withError($message, $code, array $headers = []);
+    public function withError($message, int $statusCode, $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 403 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorForbidden(string $message = '', array $headers = []);
+    public function errorForbidden(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 500 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorInternalError(string $message = '', array $headers = []);
+    public function errorInternalError(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 404 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorNotFound(string $message = '', array $headers = []);
+    public function errorNotFound(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 401 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnauthorized(string $message = '', array $headers = []);
+    public function errorUnauthorized(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 400 HTTP header and a given message.
      *
      * @param array $message
+     * @param int|array $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorWrongArgs(array $message, array $headers = []);
+    public function errorWrongArgs(array $message, $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 410 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorGone(string $message = '', array $headers = []);
+    public function errorGone(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a response with a 405 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorMethodNotAllowed(string $message = '', array $headers = []);
+    public function errorMethodNotAllowed(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a Response with a 431 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnwillingToProcess(string $message = '', array $headers = []);
+    public function errorUnwillingToProcess(string $message = '', $errorCode, array $headers = []);
 
     /**
      * Generates a Response with a 422 HTTP header and a given message.
      *
      * @param string $message
+     * @param int|string $errorCode
      * @param array  $headers
      * @return mixed
      */
-    public function errorUnprocessable(string $message = '', array $headers = []);
+    public function errorUnprocessable(string $message = '', $errorCode, array $headers = []);
 }
