@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "harryosmar/php-restful-api-response": "^1.0"
+        "harryosmar/php-restful-api-response": "^1.1"
     }
 }
 ```
