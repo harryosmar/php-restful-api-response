@@ -16,10 +16,12 @@ use League\Fractal\TransformerAbstract;
 use PhpRestfulApiResponse\Contracts\PhpRestfulApiResponse;
 use Zend\Diactoros\MessageTrait;
 use InvalidArgumentException;
+use Zend\Diactoros\Response\InjectContentTypeTrait;
+use Zend\Diactoros\Response\JsonResponse;
 
 class Response implements PhpRestfulApiResponse
 {
-    use MessageTrait;
+    use MessageTrait, InjectContentTypeTrait;
 
     const MIN_STATUS_CODE_VALUE = 100;
     const MAX_STATUS_CODE_VALUE = 599;
@@ -130,6 +132,7 @@ class Response implements PhpRestfulApiResponse
         $this->setStatusCode($status);
         $this->setErrorCode($errorCode);
         $this->stream = $this->getStream($body, 'wb+');
+        $headers = $this->injectContentType('application/json', $headers);
         $this->setHeaders($headers);
     }
 
@@ -176,8 +179,7 @@ class Response implements PhpRestfulApiResponse
     {
         $new = clone $this;
         $new->setStatusCode($code);
-        $new->getBody()->write(json_encode($data));
-        $new = $new->withHeader('Content-Type', 'application/json');
+        $new->getBody()->write($this->jsonEncode($data));
         $new->headers = array_merge($new->headers, $headers);
         return $new;
     }
@@ -250,7 +252,7 @@ class Response implements PhpRestfulApiResponse
         $new->setStatusCode($statusCode);
         $new->setErrorCode($errorCode);
         $new->getBody()->write(
-            json_encode(
+            $this->jsonEncode(
                 [
                     'error' => array_filter([
                         'http_code' => $new->statusCode,
@@ -261,7 +263,6 @@ class Response implements PhpRestfulApiResponse
                 ]
             )
         );
-        $new = $new->withHeader('Content-Type', 'application/json');
         $new->headers = array_merge($new->headers, $headers);
         return $new;
     }
@@ -419,5 +420,34 @@ class Response implements PhpRestfulApiResponse
             ));
         }
         $this->statusCode = $statusCode;
+    }
+
+    /**
+     * Encode the provided data to JSON.
+     *
+     * @param mixed $data
+     * @return string
+     * @throws InvalidArgumentException if unable to encode the $data to JSON.
+     */
+    private function jsonEncode($data)
+    {
+        if (is_resource($data)) {
+            throw new InvalidArgumentException('Cannot JSON encode resources');
+        }
+
+        // Clear json_last_error()
+        json_encode(null);
+
+        $json = json_encode($data, JsonResponse::DEFAULT_JSON_FLAGS);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new InvalidArgumentException(sprintf(
+                'Unable to encode data to JSON in %s: %s',
+                __CLASS__,
+                json_last_error_msg()
+            ));
+        }
+
+        return $json;
     }
 }
