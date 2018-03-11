@@ -12,6 +12,7 @@ use PhpRestfulApiResponse\Response;
 use PhpRestfulApiResponse\Tests\unit\Lib\Book;
 use ReflectionClass;
 use InvalidArgumentException;
+use Zend\Diactoros\Response\ArraySerializer;
 
 class ResponseTest extends Base
 {
@@ -31,6 +32,7 @@ class ResponseTest extends Base
         /** @var Response $response */
         $response = $this->response->withArray(['status' => 'success'], 200);
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('{"status":"success"}', ArraySerializer::toArray($response)['body']);
         $this->assertEquals('{"status":"success"}', $response->getBody()->__toString());
     }
 
