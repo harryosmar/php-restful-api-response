@@ -31,7 +31,7 @@ class Response implements PhpRestfulApiResponse
      *
      * @var array
      */
-    private $phrases = [
+    protected $phrases = [
         // INFORMATIONAL CODES
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -108,17 +108,17 @@ class Response implements PhpRestfulApiResponse
     /**
      * @var string
      */
-    private $reasonPhrase = '';
+    protected $reasonPhrase = '';
 
     /**
      * @var int
      */
-    private $statusCode;
+    protected $statusCode;
 
     /**
      * @var int|string
      */
-    private $errorCode;
+    protected $errorCode;
 
     /**
      * Response constructor.
@@ -407,7 +407,7 @@ class Response implements PhpRestfulApiResponse
      * @param int $statusCode
      * @throws InvalidArgumentException on an invalid status code.
      */
-    private function setStatusCode(int $statusCode)
+    protected function setStatusCode(int $statusCode)
     {
         if ($statusCode < static::MIN_STATUS_CODE_VALUE
             || $statusCode > static::MAX_STATUS_CODE_VALUE
@@ -429,7 +429,7 @@ class Response implements PhpRestfulApiResponse
      * @return string
      * @throws InvalidArgumentException if unable to encode the $data to JSON.
      */
-    private function jsonEncode($data)
+    protected function jsonEncode($data)
     {
         if (is_resource($data)) {
             throw new InvalidArgumentException('Cannot JSON encode resources');
